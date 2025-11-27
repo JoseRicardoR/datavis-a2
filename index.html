@@ -16,21 +16,28 @@
 <body>
 
     <!-- YOUR SOLUTION GOES HERE-->
-    <h2>Scatter Plot</h2>
-    <!-- Initialize a select button -->
-    <label for="xlist">Select X variable:</label>
-    <select id="selectListX" class="selectList">Retail Price</select>
-    <!-- Initialize a select button -->
-    <label for="ylist">Select Y variable:</label>
-    <select id="selectListY" class="selectList">"Horsepower(HP)</select>
-    <div id="chart"></div>
+    <div class="charts-container">
+        <!-- Scatter Plot Section -->
+        <div class="chart-section">
+            <h2>Scatter Plot</h2>
+            <label for="xlist">Select X variable:</label>
+            <select id="selectListX" class="selectList">Retail Price</select>
+            <label for="ylist">Select Y variable:</label>
+            <select id="selectListY" class="selectList">"Horsepower(HP)</select>
+            <div id="chart"></div>
+        </div>
 
-    <h2>Radar chart</h2>
-    <div id="radar_chart"></div>
+        <!-- Radar Chart Section -->
+        <div class="chart-section">
+            <h2>Radar chart</h2>
+            <div id="radar_chart"></div>
+        </div>
+    </div>
 
-
-    <h2>Scatter Plot Matrix</h2>
-    <div id="scatter_matrix_chart"></div>
+    <div class="chart-section">
+        <h2>Scatter Plot Matrix</h2>
+        <div id="scatter_matrix_chart"></div>
+    </div>
 
     <!-- loading the main javascript file; implement logic there -->
     <script src="main.js"></script>

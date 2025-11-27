@@ -2,6 +2,10 @@ body {
     height: 100%;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
+.charts-container {
+    display: flex;
+    gap: 20px;
+}
 
 svg {
     font-family:  'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;

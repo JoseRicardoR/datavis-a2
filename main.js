@@ -95,7 +95,7 @@ window.onload = () => {
         .size(60)
         .type(function (d) { return shapeScale(d) })
       )
-      .attr("transform", function (d, i) { return `translate(${width - 3},${(i * 15 + margin.top)})` })
+      .attr("transform", function (d, i) { return `translate(${width - 3},${(i * 20 + margin.top)})` })
       .style("fill", function (d) { return colorScale(d) })
       .style("opacity", 0.8)
 
@@ -107,7 +107,7 @@ window.onload = () => {
       .append("text")
       .attr("size", 120)
       .attr("x", width + 15)
-      .attr("y", function (d, i) { return i * 15 + margin.top }) // 100 is where the first dot appears. 25 is the distance between dots
+      .attr("y", function (d, i) { return i * 20 + margin.top + 2 }) // 100 is where the first dot appears. 25 is the distance between dots
       .text(function (d) { return d })
       .attr("text-anchor", "left")
       .style("alignment-baseline", "middle")
@@ -231,7 +231,7 @@ window.onload = () => {
 
 
     const radius = width * 0.25;
-    const center = { x: (width + margin.left + margin.right) * 0.5 + 15, y: (height + margin.top + margin.bottom) * 0.35 };
+    const center = { x: (width + margin.left + margin.right) * 0.60, y: (height + margin.top + margin.bottom) * 0.35 };
 
     var svg_radar = d3.select("#radar_chart")
       .append("svg")
@@ -274,6 +274,20 @@ window.onload = () => {
         .attr('x', x)
         .attr('y', y)
     }
+
+    svg_radar.append("g")
+      .attr("class", "table_description")
+      .attr("transform", `translate( ${margin.top}, ${margin.top})`)
+      .append("rect")
+      .attr("width", 160)
+      .attr("height", 160)
+      .attr("opacity", 0.6)
+      .attr("rx", 5)
+      .style("fill", "white")
+      .style("fill-opacity", 0.5)
+      .style("stroke", "#8e8e8eff")
+      .style("stroke-width", 1);
+
 
     //First renderization
 
@@ -326,13 +340,35 @@ window.onload = () => {
         .merge(path)
         .transition()
         .duration(200)
-        .attr("class", "path")
         .attr('d', path_radial)
         .style('stroke', data_radi.color)
         .style('stroke-width', 3)
         .style('stroke-opacity', 0.6)
         .style('fill', data_radi.color)
         .style('fill-opacity', 0.3)
+
+      console.log(data_radi)
+
+      let legend_text = headers.map((h, i) => `${h}: ${data_radi.values[i].toFixed(2)}`);
+
+      let starlegend = svg_radar
+        .selectAll(".starlegend")     // seleccionar clase, no tag
+        .data(legend_text)
+        .join(
+          enter => enter.append("text")
+            .attr("class", "starlegend")
+            .attr("x", 2+margin.top)
+            .attr("y", (d, i) => i * 12 + 2*margin.top)
+            .text(d => d)
+            .style("font-size", "12px")         // <── ¡ESTO FUNCIONA!
+            .attr("text-anchor", "start")
+            .attr("fill","#585858ff")
+            .style("alignment-baseline", "middle"),
+          update => update
+            .text(d => d)
+            .style("font-size", "12px"),        // dinámico también
+          exit => exit.remove()
+        )
 
     };
 

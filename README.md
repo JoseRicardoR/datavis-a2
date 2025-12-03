@@ -1,20 +1,54 @@
-# DataVis Assignment 2
+# DataVis Assignment 2 - Car Data Visualization
 
-This repository contains the bare-bones files to start up and solve the second assignment of the DataVis course at TU Dresden. 
+A D3.js-based interactive data visualization project showcasing three different chart types for exploring multivariate data.
 
-It also contains the sample cars.csv dataset -- remember, it contains some errors! 
+## Overview
 
-## Local development: 
-Pre-requisite: [Node.js](https://nodejs.org/en). Install `serve` using: 
-> npm install serve --global 
+This project provides an interactive dashboard with three synchronized visualizations:
 
-And start the application using 
-> serve -p 8000 
+1. **Scatter Plot** - Explore relationships between two attributes selectable from the app.
+2. **Radar Chart** - Detailed view of individual rows of the dataset.
+3. **Scatter Plot Matrix** - Compare multiple variables simultaneously.
 
-You should then be able to see your website at [http://localhost:8000](http://localhost:8000). 
+## Features
 
-*Note:* feel free to explore other development environments such as [Vite](https://vite.dev/), [Flask (python)](https://flask.palletsprojects.com/en/stable/), etc. 
+### Scatter Plot
+- Select X and Y axes from available car attributes
+- Color-coded by car type
+- Hover tooltips display car information
+- Click points to view detailed specs in the radar chart
+- Dynamic legend with shape symbols for each car type
 
-## Debugging: 
-Feel free to make extensive use of your browser's development tools! 
-In chrome-based browsers, you can simply use Ctrl+J to open the browser console, which will show all the `console.log` and similar that you write in the code. 
+### Radar Chart
+- Displays detailed specifications for selected cars
+- Multi-dimensional visualization of car attributes
+- Shows all available numeric attributes
+
+### Scatter Plot Matrix
+- Pre-selected variables: Cyl, Retail Price, Weight, Horsepower(HP)
+- Pairwise comparisons of variables
+- Color-coded by car type
+
+## Github page
+Follow the link ![https://josericardor.github.io/datavis-a2/] to find the live github page of the project.
+
+## Project Structure
+
+```
+datavis-a2/
+├── index.html          # Main HTML file with chart containers
+├── main.js             # D3.js visualization logic
+├── style.css           # CSS styling
+├── cars.csv            # Dataset (contains some intentional errors)
+├── d3.v5.min.js        # D3.js library
+└── README.md           # This file
+```
+
+## References
+This work was based mostly on the examples provided by:
+
+- [D3.js Course - ObservableHQ](https://observablehq.com/@observablehq/introduction-to-d3-course)
+- [D3 Graph Gallery](https://d3-graph-gallery.com/)
+- [D3 Documentation](https://d3js.org/)
+
+* The documentation of this code was partly AI generated and corrected by the author

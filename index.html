@@ -17,32 +17,36 @@
 
     <!-- YOUR SOLUTION GOES HERE-->
     <div class="charts-container">
-        <!-- Scatter Plot Section -->
         <div class="chart-section">
+            <!-- Scatter Plot Section -->
             <h2>Scatter Plot</h2>
-            <p>Select the variables you want to visualize on each axis. 
-                The color encoding is defined by the car type. 
-                By hovering on the points is possible to previsualize some information of a car,
-                and by clicking the whole details of the selected car will be provided on the radar/spyder plot.
+            <p>Select the variables you want to visualize on each axis.
+                The color encoding is defined by the car type as well as the shape of the markers.
+                By hovering over the points, you can preview some information about a car,
+                and by clicking on a point, the full details of the selected car will be displayed in the radar/spider plot.
             </p>
             <label for="xlist">Select X variable:</label>
             <select id="selectListX" class="selectList">Retail Price</select>
             <label for="ylist">Select Y variable:</label>
-            <select id="selectListY" class="selectList">"Horsepower(HP)</select>
+            <select id="selectListY" class="selectList">Horsepower(HP)</select>
             <div id="chart"></div>
         </div>
 
         <!-- Radar Chart Section -->
         <div class="chart-section">
-            <h2>Radar chart</h2>
+            <h2>Radar Chart</h2>
+            <p>See detailed information about the selected point from the scatter plot.
+                Color-encoded according to car type.
+            </p>
             <div id="radar_chart"></div>
         </div>
     </div>
 
     <div class="chart-section">
+        <!-- Scatter Plot Matrix Section -->
         <h2>Scatter Plot Matrix</h2>
-        <p> The variables Cyl, Retail Price, Weight and Horsepower(HP) where selected for the 
-            matrix scatter plot. 
+        <p>The variables Cyl, Retail Price, Weight, and Horsepower(HP) were selected for the
+            matrix scatter plot.
         </p>
         <div id="scatter_matrix_chart"></div>
     </div>

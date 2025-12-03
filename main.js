@@ -114,7 +114,7 @@ window.onload = () => {
 
     var selected_data_index = 0;
 
-    updateScatter("Retail Price", "Retail Price")
+    updateScatter("Horsepower(HP)", "Retail Price")
 
 
     function updateScatter(xCol, yCol) {
@@ -357,20 +357,156 @@ window.onload = () => {
         .join(
           enter => enter.append("text")
             .attr("class", "starlegend")
-            .attr("x", 2+margin.top)
-            .attr("y", (d, i) => i * 12 + 2*margin.top)
+            .attr("x", 2 + margin.top)
+            .attr("y", (d, i) => i * 12 + 2 * margin.top)
             .text(d => d)
             .style("font-size", "12px")         // <── ¡ESTO FUNCIONA!
             .attr("text-anchor", "start")
-            .attr("fill","#585858ff")
+            .attr("fill", "#585858ff")
             .style("alignment-baseline", "middle"),
           update => update
             .text(d => d)
             .style("font-size", "12px"),        // dinámico también
           exit => exit.remove()
         )
-
     };
+
+
+
+
+
+    // -------------------------------------------------------
+    var matrix_data = data.map(d => ({
+      "Type": d["Type"],
+      "Cyl": +d["Cyl"],
+      "Retail Price": +d["Retail Price"],
+      "Weight": +d["Weight"],
+      "Horsepower(HP)": +d["Horsepower(HP)"]
+    }));
+
+    var columns = d3.keys(matrix_data[0]).filter(x => x !== "Type" && x !== "Name")
+
+    console.log("Scatter Matrix Data", matrix_data);
+
+    // Specify the chart’s dimensions.
+    const width_matrix = 2 * width + (margin.left + margin.right);
+    const height_matrix = width_matrix;
+    const padding = 40;
+    const size = (width_matrix - (columns.length + 1) * padding) / columns.length + padding;
+
+    const svg_matrix = d3.select("#scatter_matrix_chart")
+      .append("svg")
+      .attr("width", width_matrix)
+      .attr("height", height_matrix)
+      .attr("viewBox", [-padding, -padding/2, width_matrix, height_matrix]);
+
+    // Define the horizontal scales (one for each row).
+    const x_matrix = columns.map(c => d3.scaleLinear()
+      .domain(d3.extent(matrix_data, d => d[c]))
+      .rangeRound([padding / 2, size - padding / 2]))
+
+    // Define the companion vertical scales (one for each column).
+    const y_matrix = x_matrix.map(x_matrix => x_matrix.copy().range([size - padding / 2, padding / 2]));
+
+    // Define the horizontal axis (it will be applied separately for each column).
+    const axisx = d3.axisBottom()
+      .ticks(5)
+      .tickSize(size * columns.length);
+    const xAxis = g => g.selectAll("g").data(x_matrix).join("g")
+      .attr("transform", (d, i) => `translate(${i * size},0)`)
+      .each(function (d) { return d3.select(this).call(axisx.scale(d)); })
+      .call(g => g.select(".domain").remove())
+      .call(g => g.selectAll(".tick line").attr("stroke", "#ddd"));
+
+
+    // Define the vertical axis (it will be applied separately for each row).
+    const axisy = d3.axisLeft()
+      .ticks(6)
+      .tickSize(-size * columns.length);
+    const yAxis = g => g.selectAll("g").data(y_matrix).join("g")
+      .attr("transform", (d, i) => `translate(0,${i * size})`)
+      .each(function (d) { return d3.select(this).call(axisy.scale(d)); })
+      .call(g => g.select(".domain").remove())
+      .call(g => g.selectAll(".tick line").attr("stroke", "#ddd"));
+
+
+    svg_matrix.append("style")
+      .text(`circle.hidden { fill: #000; fill-opacity: 1; r: 1px; }`);
+
+    svg_matrix.append("g")
+      .call(xAxis);
+
+    svg_matrix.append("g")
+      .call(yAxis);
+
+
+    const cell = svg_matrix.append("g")
+      .selectAll("g")
+      .data(d3.cross(d3.range(columns.length), d3.range(columns.length)))
+      .join("g")
+      .attr("transform", ([i, j]) => `translate(${i * size},${j * size})`);
+
+
+    // boxes for the scatter plots
+    cell.append("rect")
+      .attr("fill", "none")
+      .attr("stroke", "#aaa")
+      .attr("x", padding / 2 + 0.5)
+      .attr("y", padding / 2 + 0.5)
+      .attr("width", size - padding)
+      .attr("height", size - padding);
+
+
+    cell.each(function ([i, j]) {
+      d3.select(this).selectAll("circle")
+        .data(matrix_data.filter(d => !isNaN(d[columns[i]]) && !isNaN(d[columns[j]])))
+        .join("circle")
+        .attr("cx", d => x_matrix[i](d[columns[i]]))
+        .attr("cy", d => y_matrix[j](d[columns[j]]));
+    });
+
+
+    const circle = cell.selectAll("circle")
+      .attr("r", 3.5)
+      .attr("fill-opacity", 0.7)
+      .style("fill", function (d) { return colorScale(d["Type"]) })
+
+
+    svg_matrix.append("g")
+      .style("font", "bold 10px sans-serif")
+      .style("pointer-events", "none")
+      .selectAll("text")
+      .data(columns)
+      .join("text")
+      .attr("transform", (d, i) => `translate(${i * size},${i * size})`)
+      .attr("x", padding)
+      .attr("y", padding)
+      .attr("dy", ".71em")
+      .text(d => d);
+
+
+    // Add one dot in the legend for each name.
+    svg_matrix.selectAll("legendlabels")
+      .data(carTypes)
+      .enter()
+      .append("text")
+      .attr("size", 120)
+      .attr("x", function (d, i) { return (i) * 100 + margin.left })
+      .attr("y", 0) // 100 is where the first dot appears. 25 is the distance between dots
+      .text(function (d) { return d })
+      .attr("text-anchor", "left")
+      .style("alignment-baseline", "middle")
+
+    svg_matrix.selectAll("legenddots")
+      .data(carTypes)
+      .enter()
+      .append("circle")
+      .attr("class", "legenddots")
+      .attr("cx", function (d, i) { return i * 100 + margin.left - 10})
+      .attr("cy", 0)
+      .style("fill", function (d) { return colorScale(d) })
+      .attr("r", 5)
+      .attr("fill-opacity", 10)
 
   }).catch(error => {
     console.error("Error loading CSV:", error);

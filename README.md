@@ -30,7 +30,7 @@ This project provides an interactive dashboard with three synchronized visualiza
 - Color-coded by car type
 
 ## Github page
-Follow the link ![https://josericardor.github.io/datavis-a2/](Github Page) to find the live github page of the project.
+Follow the link https://josericardor.github.io/datavis-a2/ to find the live github page of the project.
 
 ## Project Structure
 
